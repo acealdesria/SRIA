@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRIA</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background: #000;
+        color: white;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: -30%;
+        background:
+            radial-gradient(circle at 50% 35%,
+            rgba(0, 110, 255, 0.38),
+            rgba(0, 35, 100, 0.18) 25%,
+            transparent 60%);
+        animation: aura 6s ease-in-out infinite alternate;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    @keyframes aura {
+        from {
+            transform: scale(1);
+            opacity: .7;
+        }
+        to {
+            transform: scale(1.15);
+            opacity: 1;
+        }
+    }
+
+    .page {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 25px;
+    }
+
+    .card {
+        width: min(900px, 100%);
+        background: rgba(0, 0, 0, 0.82);
+        border: 1px solid #087cff;
+        border-radius: 22px;
+        padding: 35px;
+        box-shadow:
+            0 0 20px rgba(0, 110, 255, .35),
+            0 0 70px rgba(0, 70, 255, .15);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: clamp(55px, 12vw, 110px);
+        margin: 0 0 20px;
+        color: #168cff;
+        text-shadow:
+            0 0 10px #087cff,
+            0 0 30px #006eff,
+            0 0 60px #0055ff;
+        letter-spacing: 8px;
+    }
+
+    h2 {
+        color: #168cff;
+        text-align: center;
+    }
+
+    p {
+        line-height: 1.7;
+        color: #ddd;
+        font-size: 17px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+
+    button {
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        padding: 15px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        transition: .2s;
+    }
+
+    button:hover {
+        transform: scale(1.04);
+    }
+
+    .join {
+        background: #087cff;
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 120, 255, .6);
+    }
+
+    .no {
+        background: #d90000;
+        color: white;
+        box-shadow: 0 0 20px rgba(255, 0, 0, .35);
+    }
+
+    .clans {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .clan {
+        background: #050505;
+        color: white;
+        border: 1px solid #175ea8;
+        box-shadow: 0 0 8px rgba(0, 100, 255, .2);
+    }
+
+    .clan.selected {
+        background: #087cff;
+        border-color: #55aaff;
+        box-shadow: 0 0 20px rgba(0, 120, 255, .7);
+    }
+
+    .special {
+        grid-column: 1 / -1;
+        border-color: #168cff;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .instruction {
+        margin-top: 30px;
+        padding: 20px;
+        border-left: 4px solid #087cff;
+        background: rgba(0, 70, 150, .12);
+        border-radius: 8px;
+    }
+
+    .discord {
+        color: #42a5ff;
+        font-weight: bold;
+    }
+
+    .alright {
+        font-size: clamp(45px, 10vw, 90px);
+        color: white;
+        text-align: center;
+        text-shadow: 0 0 20px white;
+    }
+
+    .small {
+        text-align: center;
+        color: #888;
+        margin-top: 15px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- INTRO -->
+    <div class="card" id="intro">
+
+        <h1>SRIA</h1>
+
+        <p>
+            SRIA is a professional multi-clan community designed to bring
+            multiple clans together in one place. Instead of having to search
+            everywhere for a clan, SRIA gives people the ability to choose
+            which clan or clans they want to join.
+        </p>
+
+        <p>
+            SRIA connects different clans under one multi-clan system while
+            allowing each clan to keep its own identity. Whether you're
+            looking for an active competitive clan, a community to chill with,
+            or multiple clans to be part of, SRIA gives you the choice.
+        </p>
+
+        <p>
+            The clans currently available through SRIA are ROKI, TASK FORCE,
+            SATO, CPI, AP, AHK, CHICKLAND, SRIA, IKSP, UKAP, GCC, SC and SPC.
+        </p>
+
+        <p>
+            Choose the option below to continue.
+        </p>
+
+        <div class="buttons">
+            <button class="join" onclick="openPicker()">
+                I wanna join!
+            </button>
+
+            <button class="no" onclick="finish()">
+                No, I don't want to join
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- CLAN PICKER -->
+    <div class="card hidden" id="picker">
+
+        <h2>Choose Your Clan(s)</h2>
+
+        <p>
+            Select the clan or clans you want to join.
+            You can choose multiple clans.
+        </p>
+
+        <p>
+            <b>SRIA itself represents the whole multi-clan.</b>
+            Selecting SRIA will select every clan.
+        </p>
+
+        <div class="clans" id="clanList"></div>
+
+        <div class="buttons">
+            <button class="join" onclick="showInstructions()">
+                Continue
+            </button>
+
+            <button class="no" onclick="finish()">
+                X
+            </button>
+        </div>
+
+        <p class="small" id="selectedText">
+            No clans selected.
+        </p>
+
+    </div>
+
+
+    <!-- INSTRUCTIONS -->
+    <div class="card hidden" id="instructions">
+
+        <h2>You're In.</h2>
+
+        <p id="chosen"></p>
+
+        <div class="instruction">
+            <p>
+                To join, add
+                <span class="discord">@acealdesriarl</span>
+                as the username in Discord.
+                He will add you to the servers and clan.
+            </p>
+        </div>
+
+        <div class="buttons">
+            <button class="join" onclick="finish()">
+                Done
+            </button>
+
+            <button class="no" onclick="finish()">
+                End
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- FINAL -->
+    <div class="card hidden" id="final">
+
+        <div class="alright">Alright.</div>
+
+        <div class="buttons">
+            <button class="join" onclick="restart()">
+                Nevermind, I changed my mind, I wanna join.
+            </button>
+
+            <button class="no" onclick="endSite()">
+                End.
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const clans = [
+    "ROKI",
+    "TASK FORCE",
+    "SATO",
+    "CPI",
+    "AP",
+    "AHK",
+    "CHICKLAND",
+    "SRIA",
+    "IKSP",
+    "UKAP",
+    "GCC",
+    "SC",
+    "SPC"
+];
+
+let selected = [];
+
+const clanList = document.getElementById("clanList");
+const selectedText = document.getElementById("selectedText");
+
+
+// Create clan buttons
+clans.forEach(clan => {
+
+    const button = document.createElement("button");
+
+    button.className = "clan";
+
+    if (clan === "SRIA") {
+        button.classList.add("special");
+    }
+
+    button.textContent = clan;
+
+    button.onclick = () => toggleClan(clan, button);
+
+    clanList.appendChild(button);
+});
+
+
+// Clan selection
+function toggleClan(clan, button) {
+
+    // SRIA = entire multi-clan
+    if (clan === "SRIA") {
+
+        if (selected.length === clans.length) {
+            selected = [];
+        } else {
+            selected = [...clans];
+        }
+
+        updateButtons();
+        return;
+    }
+
+    // If SRIA was selected and user clicks an individual clan,
+    // remove the "whole SRIA" selection first.
+    if (selected.length === clans.length) {
+        selected = [];
+    }
+
+    if (selected.includes(clan)) {
+        selected = selected.filter(x => x !== clan);
+    } else {
+        selected.push(clan);
+    }
+
+    updateButtons();
+}
+
+
+// Update visual selections
+function updateButtons() {
+
+    document.querySelectorAll(".clan").forEach(button => {
+
+        if (selected.includes(button.textContent)) {
+            button.classList.add("selected");
+        } else {
+            button.classList.remove("selected");
+        }
+
+    });
+
+    if (selected.length === 0) {
+        selectedText.textContent = "No clans selected.";
+    }
+
+    else if (selected.length === clans.length) {
+        selectedText.textContent =
+            "SRIA selected — the entire multi-clan.";
+    }
+
+    else {
+        selectedText.textContent =
+            "Selected: " + selected.join(", ");
+    }
+}
+
+
+// Screen switching
+function hideAll() {
+    document.getElementById("intro").classList.add("hidden");
+    document.getElementById("picker").classList.add("hidden");
+    document.getElementById("instructions").classList.add("hidden");
+    document.getElementById("final").classList.add("hidden");
+}
+
+
+function openPicker() {
+    hideAll();
+    document.getElementById("picker").classList.remove("hidden");
+}
+
+
+function showInstructions() {
+
+    if (selected.length === 0) {
+        alert("Please select at least one clan.");
+        return;
+    }
+
+    hideAll();
+
+    const chosen = document.getElementById("chosen");
+
+    if (selected.length === clans.length) {
+
+        chosen.textContent =
+            "You selected SRIA, meaning you are joining the entire SRIA multi-clan.";
+
+    } else {
+
+        chosen.textContent =
+            "You selected: " + selected.join(", ");
+
+    }
+
+    document.getElementById("instructions").classList.remove("hidden");
+}
+
+
+function finish() {
+    hideAll();
+    document.getElementById("final").classList.remove("hidden");
+}
+
+
+function restart() {
+
+    selected = [];
+
+    updateButtons();
+
+    hideAll();
+
+    document.getElementById("intro").classList.remove("hidden");
+}
+
+
+function endSite() {
+
+    document.body.innerHTML =
+        '<div style="background:#000;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial;font-size:80px;">Alright.</div>';
+}
+
+</script>
+
+</body>
+</html>
